@@ -1,7 +1,7 @@
 # Architecture Copilot · 架构副驾 🧭
 
-> 一个给 **Claude Code / Cursor / OpenAI Codex** 用的「架构共创」skill。
-> 在你写第一行代码前,它用**持续的深度提问**陪你把系统架构想清楚——不是替你决定,而是帮你看清每个选择背后的取舍。
+> 一个给 **Claude Code / Cursor / OpenAI Codex** 用的「架构共创 + 真实仓库体检」skill。
+> 新系统用**持续的深度提问**陪你把架构想清楚;已有项目先读代码和配置,再给有证据的架构判断。
 
 [English](./README_en.md) · **简体中文**
 
@@ -53,9 +53,20 @@ AI 已经能替你写绝大部分代码。但有件事它不会主动替你做,�
 
 到最后,它会帮你收敛出:**架构全景图(ASCII)、数据模型、一串 ADR 决策记录、规模化瓶颈预警、MVP→成熟的演进路线、以及诚实的风险清单**。
 
+### 已有项目:先取证,再判断
+
+当你说「了解当前项目,从代码还原架构,告诉我最值得改的三件事」时,它不会反问你项目是什么,也不会只复述 README。它会先检查入口、核心模块、数据与迁移、部署 / CI、测试和真实主数据流,再输出:
+
+- 当前 Context / Container 架构与主数据流;
+- 「已观察 / 推断 / 未知」证据表,每项附文件或命令;
+- 按影响、置信度、复用面、成本与风险排序的高杠杆 Top 3;
+- 每项改进的验证方式、回滚路径、ADR 与可机器执行的架构护栏。
+
+这让 Architecture Copilot 不只在项目开始前有用,也能用于接手陌生仓库、技术债排序和架构演进评审。
+
 ---
 
-## 七个阶段
+## 八个阶段(0-7)
 
 | 阶段 | 它在干什么 |
 |---|---|
@@ -78,7 +89,8 @@ AI 已经能替你写绝大部分代码。但有件事它不会主动替你做,�
 |---|---|---|
 | **Claude Code** | [`skills/architecture-copilot/SKILL.md`](skills/architecture-copilot/SKILL.md) | `~/.claude/skills/` 或项目 `.claude/skills/` |
 | **Cursor** | [`.cursor/rules/architecture-copilot.mdc`](.cursor/rules/architecture-copilot.mdc) | 你项目的 `.cursor/rules/` |
-| **OpenAI Codex** | [`AGENTS.md`](AGENTS.md) | 你项目根的 `AGENTS.md` |
+| **OpenAI Codex** | 原生 [`skills/architecture-copilot/`](skills/architecture-copilot/) | `~/.codex/skills/architecture-copilot/` |
+| **Codex 项目级加强** | [`AGENTS.md`](AGENTS.md)(可选) | 合并到项目根 `AGENTS.md` |
 | **任何其它 AI** | 直接把 `SKILL.md` 正文当系统提示粘贴 | —— |
 
 👉 详细安装步骤见 **[INSTALL.md](INSTALL.md)**。
@@ -98,9 +110,23 @@ AI 已经能替你写绝大部分代码。但有件事它不会主动替你做,�
 
 ---
 
+## ✅ 可验证,不是只靠感觉改 Prompt
+
+仓库自带真实场景评测语料、结构 / 漂移检查和仓库盘点脚本:
+
+```bash
+python3 scripts/check_quality.py
+python3 -m unittest discover -s tests -v
+python3 skills/architecture-copilot/scripts/repo_inventory.py . --format markdown
+```
+
+CI 会检查 Skill 元数据、三种形态的核心能力、模板 → reference 路由、评测语料和原生 Codex 包装。完整的行为变化还要用 `evals/cases.json` 做独立前向验证。
+
+---
+
 ## 🤝 贡献
 
-欢迎补充更多系统类型的「关键决策追问」、改进引导话术、或翻译。先改 [`skills/architecture-copilot/SKILL.md`](skills/architecture-copilot/SKILL.md)(权威版),再同步 `.cursor/rules/architecture-copilot.mdc` 与 `AGENTS.md`;如果涉及教程/模板数量,也同步 `README.md`、`README_en.md`、`INSTALL.md`。
+欢迎补充更多系统类型的「关键决策追问」、改进引导话术、评测场景或翻译。先改 [`skills/architecture-copilot/SKILL.md`](skills/architecture-copilot/SKILL.md)(权威版),同步 `.cursor/rules/architecture-copilot.mdc` 与 `AGENTS.md`,然后运行 `python3 scripts/check_quality.py` 和单元测试。
 
 ---
 

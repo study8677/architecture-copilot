@@ -38,16 +38,27 @@ cp .cursor/rules/architecture-copilot.mdc /你的项目/.cursor/rules/
 
 ## 🟢 OpenAI Codex
 
-Codex 会自动读取项目根的 **`AGENTS.md`**。
+优先安装为 Codex 原生 Skill。这样可以自动触发,并保留 `references/`、`scripts/`、`assets/` 与 `agents/openai.yaml` 的完整能力:
 
 ```bash
-# 如果你的项目还没有 AGENTS.md,直接拷过去:
-cp AGENTS.md /你的项目/AGENTS.md
-
-# 如果已有 AGENTS.md,把本仓库 AGENTS.md 的内容追加进去即可。
+mkdir -p ~/.codex/skills
+cp -r skills/architecture-copilot ~/.codex/skills/
 ```
 
-然后对 Codex 说 **「我想做一个 X,帮我把架构想清楚」**,它会按规范以提问方式引导你。
+然后在 Codex 中直接说 **「我想做一个 X,帮我把架构想清楚」** 或 **「了解当前仓库,从代码还原架构并给出高杠杆 Top 3」**。
+
+### 可选:项目级 `AGENTS.md` 加强
+
+如果你希望规则随项目提交、并在所有 Codex 任务中常驻,再把精简版规则合并进项目根的 `AGENTS.md`:
+
+```bash
+# 项目尚无 AGENTS.md 时
+cp AGENTS.md /你的项目/AGENTS.md
+
+# 已有 AGENTS.md 时,人工合并相关章节,不要覆盖原有项目规则。
+```
+
+原生 Skill 是推荐方式;`AGENTS.md` 只是项目级加强,不要为了安装本 Skill 覆盖用户已有规则。
 
 ---
 
@@ -62,6 +73,7 @@ cp AGENTS.md /你的项目/AGENTS.md
 1. 先问你**想做什么**(一句话定位),不让你一上来就陷入技术细节;
 2. 然后**一步步深度追问**:业务范围 → 灵魂六问(规模/读写比/一致性/增长/失败代价/约束)→ 信封背面估算 → 质量属性取舍 → 关键决策;
 3. **每个技术选择都追问「为什么、代价是什么」**,你答不上来时给你候选项;
-4. 最后**收敛产出**:架构全景图(ASCII)、数据模型、ADR 决策记录、规模化瓶颈、演进路线、风险清单。
+4. 面对已有仓库时先检查代码、配置、部署和测试,将结论标成「已观察 / 推断 / 未知」;
+5. 最后**收敛产出**:架构全景图(ASCII)、数据模型、ADR 决策记录、规模化瓶颈、演进路线、风险清单与可执行门禁。
 
 > 它的知识与案例来自 **[awesome-architecture](https://github.com/study8677/awesome-architecture)** —— 一个专讲架构、不讲语法的开源知识库(系统设计教程 + 数十个模板/架构地图,数量以上游为准)。

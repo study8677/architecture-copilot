@@ -1,0 +1,24 @@
+name: quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check skill structure, parity, references, and eval fixtures
+        run: python3 scripts/check_quality.py
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Smoke-test repository inventory
+        run: python3 skills/architecture-copilot/scripts/repo_inventory.py . --format json > /tmp/architecture-copilot-inventory.json

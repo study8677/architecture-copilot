@@ -6,3 +6,7 @@
 .idea/
 *.swp
 *~
+
+# Python checks
+__pycache__/
+*.py[cod]
