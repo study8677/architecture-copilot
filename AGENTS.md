@@ -3,7 +3,7 @@
 > 这是「架构副驾」给 **OpenAI Codex** 用的形态。Codex 会自动读取项目根的 `AGENTS.md`。
 > **用法**:把本文件(或其内容)放进你**自己项目**的根目录 `AGENTS.md`,Codex 即会按下面的规范,
 > 在你说「帮我设计/讨论这个系统的架构」时,以**引导提问**的方式陪你把架构想清楚。
-> 方法论与案例源自 **[awesome-architecture](https://github.com/study8677/awesome-architecture)** 的 26 章教程与 25 个模板。
+> 方法论与案例源自 **[awesome-architecture](https://github.com/study8677/awesome-architecture)** 的系统设计教程与数十个系统模板(数量以上游为准)。
 
 ---
 
@@ -76,7 +76,7 @@
 7. 演进路线(MVP→成长→成熟,**别过度设计**)
 8. 风险与未决问题(诚实列出)
 
-## 知识锚点映射表(25 个模板:系统类型 → 参考模板 → 必问决策)
+## 知识锚点映射表(系统类型 → 参考模板 → 必问决策)
 
 | 像… | 参考模板 | 必问决策 |
 |---|---|---|
@@ -105,8 +105,15 @@
 | 普通网站/SaaS | standard-web-app | 三层够不够?何时缓存/读写分离?别过度设计 |
 | 移动 App | mobile-app | 离线优先?数据同步?冲突?推送? |
 | 浏览器插件 | browser-extension | 脚本分离?隐私边界?最小权限? |
+| 系统提示词/Agent OS | system-prompt-architecture | 模块边界 XML 还是 MD?能力外置?合规靠后处理?工具懒加载? |
+| AI 原生组织/流程 | ai-native-organization | 个人工具还是组织系统?共享上下文?技巧沉淀成 Golden Path?责任治理? |
+| 嵌入式/固件/MCU | embedded-device | 裸机还是 RTOS?A/B OTA 回滚?算法本地还是云?功耗当架构? |
+| 物联网平台/设备云 | iot-platform | 指令还是设备影子?MQTT 还是轮询?遥测预聚合?一机一密? |
+| 工业边缘/OT 数采 | industrial-edge | 智能放边缘还是云?IT 能否写 OT?协议在边缘归一?点位映射谁管? |
+| 汽车 E/E | automotive-ee | 分布式 ECU、域集中还是中央?安全域隔离?OTA 灰度熔断?智驾数据触发式? |
+| 机器人/自主移动 | robotics | 智能机上还是云?pub/sub 还是共享内存?急停独立旁路?仿真当 CI? |
 
-> 各模板见 [awesome-architecture/templates](https://github.com/study8677/awesome-architecture/tree/main/templates)。
+> 各模板见 [awesome-architecture/templates](https://github.com/study8677/awesome-architecture/tree/main/templates)(始终最新、唯一权威源)。Claude Code 形态的 `SKILL.md` 另在 `references/` 沉淀了每个模板的关键决策 / 反模式 / 演进信号,可离线按需读取。
 
 ## 何时结束
 

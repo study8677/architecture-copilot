@@ -64,4 +64,4 @@ cp AGENTS.md /你的项目/AGENTS.md
 3. **每个技术选择都追问「为什么、代价是什么」**,你答不上来时给你候选项;
 4. 最后**收敛产出**:架构全景图(ASCII)、数据模型、ADR 决策记录、规模化瓶颈、演进路线、风险清单。
 
-> 它的知识与案例来自 **[awesome-architecture](https://github.com/study8677/awesome-architecture)** —— 一个专讲架构、不讲语法的开源知识库(26 章教程 + 25 个模板/架构地图)。
+> 它的知识与案例来自 **[awesome-architecture](https://github.com/study8677/awesome-architecture)** —— 一个专讲架构、不讲语法的开源知识库(系统设计教程 + 数十个模板/架构地图,数量以上游为准)。
