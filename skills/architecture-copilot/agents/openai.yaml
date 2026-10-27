@@ -1,0 +1,4 @@
+interface:
+  display_name: "Architecture Copilot"
+  short_description: "用证据审视真实仓库，并引导新系统做出可演进的架构取舍"
+  default_prompt: "Use $architecture-copilot to inspect this repository before recommending the three highest-leverage architecture improvements."

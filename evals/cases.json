@@ -1,0 +1,263 @@
+[
+  {
+    "id": "forward-rag-team-20",
+    "category": "trigger.forward-design.rag",
+    "prompt": "我想做一个面向 20 人团队的内部 AI 知识库，帮我想清楚架构。",
+    "expected": [
+      "进入架构副驾的正向设计模式，并使用中文回应。",
+      "识别用户已给出系统类型和团队规模，首轮聚焦一句话定位、核心使用场景或 MVP 边界中的一个维度。",
+      "一轮只提出 1-3 个紧密相关的问题；用户可能答不上来时可给 2-3 个带代价的候选场景。",
+      "把 20 人规模视为保持简单的约束，不预设需要微服务、自建模型或专用向量数据库。"
+    ],
+    "forbidden": [
+      "信息不足时直接输出一套完整生产架构并把假设写成事实。",
+      "一次罗列十个以上跨业务、容量、安全、技术栈的问题。",
+      "未经约束分析就指定 Kubernetes、微服务、Kafka 或专用向量数据库。",
+      "把讨论拉进框架语法或具体 SDK 用法。"
+    ]
+  },
+  {
+    "id": "forward-payment-ledger",
+    "category": "trigger.forward-design.transactional",
+    "prompt": "我们准备做一个面向东南亚小商户的跨境收款和余额系统。第一版只做收款、退款和余额查询，预计峰值 100 TPS，但错账不可接受。请陪我把架构想清楚，一次别问太多。",
+    "expected": [
+      "进入正向设计模式，复述已知范围与关键质量约束，不重复追问用户已经给出的规模和 MVP。",
+      "首轮只围绕资金生命周期、一致性边界、失败代价或合规约束中的一个相邻问题组追问 1-3 项。",
+      "首轮问题显式触及支付未知态、账本口径或对账责任中的至少一个，并说明它为什么决定架构。",
+      "任何候选方案都说明获得了什么、牺牲了什么。"
+    ],
+    "forbidden": [
+      "声称分布式事务可以零代价保证所有外部支付调用强一致。",
+      "只比较数据库或编程语言，不讨论资金状态与失败语义。",
+      "忽略错账不可接受这一明确约束。",
+      "首轮直接拆出大量微服务而不说明组织或容量触发信号。"
+    ]
+  },
+  {
+    "id": "forward-agent-platform",
+    "category": "trigger.forward-design.ai-agent",
+    "prompt": "6 人研发团队想做一个内部 AI Agent 平台，让销售自动查 CRM、写跟进邮件，必要时还能更新客户状态。我们还没想清楚该做工作流还是自主 Agent，带我一步步设计。",
+    "expected": [
+      "进入正向设计模式，先收敛核心用户、首个可交付任务或明确不做的范围。",
+      "把确定性工作流与自主 Agent 作为需要由约束决定的岔路，而不是预设答案。",
+      "明确指出更新 CRM 是有副作用的写操作，并把权限、审批、审计或回退边界纳入当前追问。",
+      "每轮问题保持在 1-3 个紧密相关项，并解释当前阶段要搞清什么。"
+    ],
+    "forbidden": [
+      "默认采用多 Agent，且不给出复杂度和成本代价。",
+      "允许 Agent 无审批修改 CRM，而不讨论权限与回退。",
+      "只谈 prompt 或模型品牌，不讨论状态、工具边界和失败模式。",
+      "一开始就输出成熟期平台全景图并跳过 MVP 范围。"
+    ]
+  },
+  {
+    "id": "forward-robotics-safety",
+    "category": "trigger.forward-design.robotics",
+    "prompt": "我们要设计一个仓库 AMR 机器人调度系统，机器人会和工人混行，网络偶尔断。先别给最终图，帮我把关键架构约束问出来。",
+    "expected": [
+      "进入正向设计模式，优先识别人身安全、断网行为和机上/云端职责边界是高优先级约束。",
+      "首轮聚焦安全失败代价或断网时必须维持的能力，提出不超过 3 个相关问题。",
+      "明确指出急停和避障需要独立安全旁路，并用当前问题澄清断网时的本地自治边界。",
+      "明确安全关键路径不能只依赖云端可用性。"
+    ],
+    "forbidden": [
+      "建议把急停或避障完全放到云端执行。",
+      "把安全、故障降级或断网恢复留到最后再考虑。",
+      "先争论 ROS 版本或具体语言而不澄清安全边界。",
+      "未经约束确认直接给出一张完整组件图。"
+    ]
+  },
+  {
+    "id": "review-payment-diagram",
+    "category": "trigger.review.transactional",
+    "prompt": "请评审这份已有方案，不要从零重新设计：\n\nApp -> API Gateway -> Order Service -> MySQL\nOrder Service -> Payment Provider\nOrder Service -> Kafka -> Notification Service\n\n下单时 Order Service 先写 MySQL，再调用支付方，成功后发 Kafka。请告诉我最危险的地方和要补的 ADR。",
+    "expected": [
+      "直接进入架构评审模式，而不是从阶段 0 开始访谈。",
+      "在一页式评审中覆盖本质、全景、取舍和死穴，不要求照抄固定标题；区分图中已观察事实与需要确认的假设。",
+      "指出数据库写入、外部支付调用和 Kafka 发布之间的双写/未知态、幂等、补偿与对账风险。",
+      "提出少量必须确认的问题、建议补的 ADR 和下一步可验证实验。"
+    ],
+    "forbidden": [
+      "先问系统是什么或最像哪个产品。",
+      "忽略支付未知态、重试重复扣款或消息发布一致性。",
+      "把图中没有出现的组件或 SLA 当成已经存在的事实。",
+      "无取舍说明地把现有方案整体替换成另一套技术栈。"
+    ]
+  },
+  {
+    "id": "review-collab-mixed-levels",
+    "category": "trigger.review.collaborative-doc",
+    "prompt": "帮我读一下这张协同编辑架构图：\n\nBrowser -> React Editor -> WebSocket -> Kubernetes -> CRDT -> Redis -> Postgres\nBrowser -> S3\n\n我们总觉得这张图哪里不对。请指出问题并给出更清楚的表达方式。",
+    "expected": [
+      "进入读图模式，指出当前图混合了 UI 组件、通信方式、部署平台、算法和存储等不同抽象层级。",
+      "说明每条箭头应表达方向和数据含义，并用简洁 ASCII 图把不同抽象层级分开；若同时画 Context 与 Container，必须分成两张图。",
+      "围绕 CRDT 归属、文档操作日志/快照、离线同步、顺序和持久化边界提出关键取舍。",
+      "对 Browser 直连 S3 的用途和授权边界标记为待确认，而不是自行补全。"
+    ],
+    "forbidden": [
+      "只评价画图美观，不分析系统边界与数据流。",
+      "把 Kubernetes、CRDT、Redis 当成同一层级的并列业务组件。",
+      "不问访问模式就泛化建议加缓存或换数据库。",
+      "虚构图中未提供的鉴权、租户或流量事实。"
+    ]
+  },
+  {
+    "id": "repository-audit-inspect-first",
+    "category": "trigger.repository-audit",
+    "fixture": {
+      "id": "current-repository",
+      "cwd": ".",
+      "mode": "read-only",
+      "requirements": [
+        "从待测版本所在 Git 仓库根目录运行。",
+        "保留执行前的分支、commit 和 dirty 状态，评测后核对没有新增改动。"
+      ]
+    },
+    "prompt": "了解当前项目，先从代码和配置还原现状，再告诉我架构上最值得改的三件事。不要先问我项目是什么，也不要改文件。",
+    "expected": [
+      "执行轨迹中先读取 references/repository-review.md，再开始仓库取证。",
+      "在给建议前只读检查真实仓库的入口、模块、配置、依赖、状态/存储、外部系统、部署与测试。",
+      "用具体文件路径和必要的行号支撑关键结论，并以代码和运行配置优先于 README 声明。",
+      "清楚区分已观察、由证据推断和仍未知的信息；不把未知业务规模伪装成事实。",
+      "先还原当前 Context/Container 与主数据流，再按影响、代价和触发信号排序三项改进。",
+      "保持只读，不先反问项目是什么。"
+    ],
+    "forbidden": [
+      "未检查仓库就给通用的微服务、缓存、消息队列建议。",
+      "仅复述 README，不核对源码和配置。",
+      "引用不存在的文件、组件、数据库或运行行为。",
+      "在用户只要求审视时修改文件、安装依赖或执行有副作用的命令。",
+      "把所有未知信息都变成一长串阻塞性问题。"
+    ]
+  },
+  {
+    "id": "evolution-signal-driven",
+    "category": "trigger.evolution",
+    "prompt": "当前是模块化单体 SaaS，P99 220ms，目标 300ms；主库 CPU 峰值 35%，没有明显慢查询；8 人团队，未来一季度用户预计翻倍。现在要不要拆微服务、加 Redis、做读写分离？请给出升级触发条件。",
+    "expected": [
+      "执行轨迹中先读取 references/signals.md，再做升级判断。",
+      "把现有指标与目标和经验信号对照，明确当前没有足够证据触发微服务、缓存或读写分离。",
+      "给出可观测的触发条件，例如持续尾延迟超标、主库 CPU/排队、查询形态或团队发布互相阻塞。",
+      "建议每次升级写 ADR，包含触发证据、候选方案、代价、回滚路径和复核窗口。",
+      "说明参考数字是经验数量级，不是脱离硬件与业务的铁律。"
+    ],
+    "forbidden": [
+      "只因为用户增长预期翻倍就立即拆微服务。",
+      "没有缓存命中率、回源压力或热点证据就断言必须上 Redis。",
+      "声称某个阈值适用于所有系统且无需压测或观测。",
+      "在未读取 signals.md 的情况下冒充引用其中内容。"
+    ]
+  },
+  {
+    "id": "direct-notification-minimal",
+    "category": "trigger.direct-solution.notification",
+    "prompt": "明天就要过评审，没时间来回问答。请带着明确假设，直接给一个 500 人公司内部通知系统的最小可用架构：支持邮件和飞书，允许至少一次投递，但不能无限重复发送。",
+    "expected": [
+      "尊重直接产出的要求，先列少量关键假设，再给最小可用方案而不是只返回问题。",
+      "用简洁 ASCII 图说明入口、持久化、队列/调度、渠道适配器与状态回写的方向。",
+      "说明至少一次投递下的幂等键、去重、重试退避、死信/人工处理和渠道限频。",
+      "记录 1-2 个关键决策的选择、放弃项、代价和未来升级信号，不要求使用固定 ADR 标题。",
+      "保持单体或少量进程优先，不把 500 人规模包装成大规模互联网系统。"
+    ],
+    "forbidden": [
+      "以信息不足为由拒绝产出或只抛问题。",
+      "承诺 exactly-once 且不解释实现边界和代价。",
+      "默认拆出大量微服务、跨区多活和复杂流处理平台。",
+      "没有幂等或去重设计却声称不会重复发送。"
+    ]
+  },
+  {
+    "id": "nontrigger-fastapi-unit-test",
+    "category": "non-trigger.implementation.test",
+    "prompt": "已有方案已定，用 FastAPI 给这个 health endpoint 补一个单元测试，别讨论架构。",
+    "expected": [
+      "不进入架构副驾流程，按普通工程任务处理。",
+      "若处于仓库中，先定位 endpoint 和现有测试约定；若缺少代码上下文，只请求必要的文件或路径。",
+      "聚焦最小测试、状态码与响应体断言，并在可用时运行相关测试验证。",
+      "简短确认不会展开架构讨论。"
+    ],
+    "forbidden": [
+      "使用架构副驾开场白。",
+      "追问业务规模、读写比、一致性或演进路线。",
+      "在没有代码的情况下虚构模块、路径或测试结果。",
+      "把明确的小改动升级成框架选型讨论。"
+    ]
+  },
+  {
+    "id": "nontrigger-nextjs-config-fix",
+    "category": "non-trigger.implementation.config",
+    "fixture": {
+      "id": "nextjs-public-env-bug",
+      "cwd": "由评测运行器注入",
+      "mode": "disposable-write",
+      "requirements": [
+        "提供一个可丢弃的 Next.js 仓库，预埋 NEXT_PUBLIC_API_URL 未生效问题。",
+        "问题必须能通过检查 env 文件位置、变量读取点或构建时/运行时语义定位，并可用最小改动修复。",
+        "提供至少一个可执行的类型检查、构建或测试命令，并记录运行前基线。"
+      ]
+    },
+    "prompt": "当前 Next.js 项目的 NEXT_PUBLIC_API_URL 在浏览器里没生效。请直接检查代码和配置，做最小修复并验证；不要讨论架构。",
+    "expected": [
+      "不进入架构讨论，先检查真实 env 文件位置、启动方式、变量读取点和构建时/运行时语义。",
+      "只做解决问题所需的最小改动，并用适当的类型检查、构建或运行验证。",
+      "报告实际根因、改动文件和验证结果，不泛化扩展范围。"
+    ],
+    "forbidden": [
+      "先走阶段 0-7 的架构访谈或询问产品定位。",
+      "未经检查就断言一定是缓存、CDN 或微服务边界问题。",
+      "顺手重构无关配置、部署或目录结构。",
+      "虚构已运行的验证命令或结果。"
+    ]
+  },
+  {
+    "id": "nontrigger-postgres-api-detail",
+    "category": "non-trigger.implementation.detail",
+    "prompt": "PostgreSQL 的 SELECT FOR UPDATE SKIP LOCKED 怎么用？给我一个任务队列取一条待处理记录的简短 SQL 示例就行。",
+    "expected": [
+      "不进入架构副驾模式，直接用简短中文解释并给出 SQL 示例。",
+      "说明事务边界以及 SKIP LOCKED 会跳过已锁行这一关键语义。",
+      "保持在实现细节范围内，不扩展成完整队列系统设计。"
+    ],
+    "forbidden": [
+      "要求用户先解释业务本质或系统规模。",
+      "输出阶段 0-7 的架构流程、全景图或 ADR。",
+      "在用户只要 SQL 时长篇比较 Kafka、RabbitMQ 和数据库队列。",
+      "给出会在事务外释放锁却声称仍安全的误导示例。"
+    ]
+  },
+  {
+    "id": "direct-small-saas-no-overdesign",
+    "category": "trigger.direct-solution.standard-web",
+    "prompt": "3 个开发、6 周时间，做一个最多 80 人使用的内部审批工具。请直接给第一版架构，同时明确哪些东西先不做；不要为了显得专业而堆技术。",
+    "expected": [
+      "尊重直接产出要求，列出必要假设并给出第一版架构。",
+      "默认模块化单体、关系型数据库和托管能力等低运维方案，并把审批一致性和审计作为核心。",
+      "明确不做清单，例如微服务、事件总线、多活、复杂缓存或提前分库分表。",
+      "给出少量可观测的演进触发信号，而不是预建成熟期架构。",
+      "说明关键选择的收益与代价。"
+    ],
+    "forbidden": [
+      "只提问题而不给方案。",
+      "默认 Kubernetes、服务网格、CQRS、Event Sourcing 全套上阵。",
+      "忽略 3 人、6 周、80 人这些明确约束。",
+      "声称模块化单体没有任何代价。"
+    ]
+  },
+  {
+    "id": "interview-ecommerce-english",
+    "category": "trigger.interview.ecommerce",
+    "prompt": "Let's practice a system design interview. I need to design flash-sale inventory for an e-commerce site, but please coach me instead of giving away the answer. Ask only a couple of questions at a time.",
+    "expected": [
+      "Respond in English and enter guided system-design mode. Elicit the candidate's reasoning instead of revealing the full design.",
+      "Start with one focused question group about scope, inventory correctness, traffic shape, or failure cost, with no more than three related questions.",
+      "The opening question should explicitly surface inventory correctness or oversell tolerance, creating a path toward atomic deduction, idempotency, admission control, and timeout release.",
+      "When presenting alternatives, state the benefit and cost of each and ask the candidate to choose."
+    ],
+    "forbidden": [
+      "Answer in Chinese despite the English prompt.",
+      "Dump a complete reference architecture before the candidate has reasoned about constraints.",
+      "Ask a long checklist of unrelated questions in one turn.",
+      "Treat maximum throughput as the only goal and ignore inventory correctness."
+    ]
+  }
+]

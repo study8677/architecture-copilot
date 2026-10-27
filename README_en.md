@@ -1,7 +1,7 @@
 # Architecture Copilot 🧭
 
-> A "co-design your architecture" skill for **Claude Code / Cursor / OpenAI Codex**.
-> Before you write the first line of code, it walks you through your system's architecture with **relentless, structured questions** — not deciding for you, but making the trade-off behind every choice visible.
+> A "co-design + evidence-based repository review" skill for **Claude Code / Cursor / OpenAI Codex**.
+> For a new system it uses structured questions; for an existing repository it reads the code and configuration before making architectural claims.
 
 **English** · [简体中文](./README.md)
 
@@ -58,9 +58,20 @@ Copilot: ✅ Decision logged: use OT, give up CRDT's offline edge, because
 
 By the end, it helps you converge on: **an ASCII architecture diagram, a data model, a list of ADRs (decision records), scaling-bottleneck warnings, an MVP→mature evolution path, and an honest list of risks.**
 
+### Existing repositories: evidence before opinion
+
+Ask it to "understand this repository, reconstruct the current architecture from code, and rank the three highest-leverage improvements." It will inspect entry points, core modules, data and migrations, deployment / CI, tests, and real request or event flows before answering. The result includes:
+
+- the current Context / Container view and primary data flows;
+- an Observed / Inferred / Unknown evidence table with file or command references;
+- a Top 3 ranked by impact, confidence, reuse, cost, and risk;
+- validation steps, rollback paths, ADR candidates, and enforceable architecture guardrails.
+
+That makes the skill useful not only before a project starts, but also when onboarding to an unfamiliar codebase, prioritizing technical debt, or reviewing an evolution plan.
+
 ---
 
-## The seven stages
+## Eight stages (0-7)
 
 | Stage | What it's doing |
 |---|---|
@@ -83,7 +94,8 @@ By the end, it helps you converge on: **an ASCII architecture diagram, a data mo
 |---|---|---|
 | **Claude Code** | [`skills/architecture-copilot/SKILL.md`](skills/architecture-copilot/SKILL.md) | `~/.claude/skills/` or project `.claude/skills/` |
 | **Cursor** | [`.cursor/rules/architecture-copilot.mdc`](.cursor/rules/architecture-copilot.mdc) | your project's `.cursor/rules/` |
-| **OpenAI Codex** | [`AGENTS.md`](AGENTS.md) | your project root `AGENTS.md` |
+| **OpenAI Codex** | native [`skills/architecture-copilot/`](skills/architecture-copilot/) | `~/.codex/skills/architecture-copilot/` |
+| **Codex project overlay** | [`AGENTS.md`](AGENTS.md) (optional) | merge into the project-root `AGENTS.md` |
 | **Any other AI** | paste `SKILL.md` body as the system prompt | —— |
 
 👉 Full install steps in **[INSTALL.md](INSTALL.md)**.
@@ -96,16 +108,30 @@ The two repos are a pair:
 
 | | Repo | Role |
 |---|---|---|
-| 📚 | **[awesome-architecture](https://github.com/study8677/awesome-architecture)** | **Knowledge**: 26-chapter tutorial on architectural thinking + 25 templates / architecture maps (architecture only, no syntax). |
+| 📚 | **[awesome-architecture](https://github.com/study8677/awesome-architecture)** | **Knowledge**: a continuously evolving architecture-thinking tutorial, system templates, and end-to-end cases (architecture only, no syntax). |
 | 🧭 | **architecture-copilot** (this repo) | **Capability**: turns that knowledge into a skill that **actively guides you** inside Claude Code / Cursor / Codex. |
 
 > One is the textbook; the other is the tutor that asks the questions. While guiding you, the Copilot cites the matching template and methodology from the former (building e-commerce? it pulls out the [e-commerce template](https://github.com/study8677/awesome-architecture/blob/main/templates/ecommerce-platform/README.md)'s key decisions to interrogate you).
 
 ---
 
+## ✅ Verifiable, not prompt editing by feel
+
+The repository includes realistic evaluation cases, structural / drift checks, and a read-only repository inventory tool:
+
+```bash
+python3 scripts/check_quality.py
+python3 -m unittest discover -s tests -v
+python3 skills/architecture-copilot/scripts/repo_inventory.py . --format markdown
+```
+
+CI checks skill metadata, cross-surface capability parity, template-to-reference routing, evaluation fixtures, and native Codex packaging. Behavioral changes should also be forward-tested against `evals/cases.json` with an independent agent.
+
+---
+
 ## 🤝 Contributing
 
-Add key-decision prompts for more system types, improve the guiding script, or translate. Edit [`skills/architecture-copilot/SKILL.md`](skills/architecture-copilot/SKILL.md) first (the source of truth), then sync `.cursor/rules/architecture-copilot.mdc` and `AGENTS.md`; if tutorial/template counts change, also sync `README.md`, `README_en.md`, and `INSTALL.md`.
+Add key-decision prompts, improve the guided workflow, contribute evaluation cases, or translate. Edit [`skills/architecture-copilot/SKILL.md`](skills/architecture-copilot/SKILL.md) first (the source of truth), sync `.cursor/rules/architecture-copilot.mdc` and `AGENTS.md`, then run `python3 scripts/check_quality.py` and the unit tests.
 
 ---
 

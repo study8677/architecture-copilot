@@ -30,6 +30,14 @@
 | `signals.md` | 「什么信号 → 该升级什么」量化对照表,阶段 5 演进追问 / 阶段 7 反挑战引用 |
 | `glossary.md` | 核心架构术语速查,用户卡在概念时对齐 |
 
+以及一份面向真实工程仓库的工作流:
+
+| 文件 | 用途 |
+|---|---|
+| `repository-review.md` | 从代码 / 配置 / 测试 / 部署证据还原现状,并排序高杠杆 Top 3 |
+
+`repository-review.md` 不是上游模板快照;它与 `scripts/repo_inventory.py`、`assets/architecture-review-template.md` 配套,只在用户要求了解或评审现有仓库时加载。
+
 ## 漂移策略(维护者必读)
 
 - 本目录是上游 [awesome-architecture](https://github.com/study8677/awesome-architecture) `templates/` 的**裁剪快照**,
